@@ -1,4 +1,4 @@
-import { Node, Edge } from "reactflow";
+import { Node, Edge, MarkerType } from "reactflow";
 import { parseCSV } from "./csvLoader";
 import { generateLayout } from "./layout";
 import { applyForceLayout } from "./forceLayout";
@@ -28,19 +28,12 @@ export async function loadSeedGraph() {
     },
   }));
 
-  //   const edges: Edge[] = edgeRows.map((e, i) => ({
-  //     id: `e-${i}`,
-  //     source: e.source,
-  //     target: e.target,
-  //     label: e.label,
-  //   }))
-
   const edges: Edge[] = edgeRows.map((e, i) => ({
     id: `e-${i}`,
     source: String(e.source),
     target: String(e.target),
     label: e.label,
-    markerEnd: { type: "arrowclosed" },
+    markerEnd: { type: MarkerType.ArrowClosed },
     style: { strokeWidth: 2 },
   }));
 

@@ -5,8 +5,7 @@ import GraphSearch from "./GraphSearch";
 import { layoutGraph } from "@/lib/layoutGraph";
 
 export default function GraphToolbar({ nodes, edges, onSelect, setNode }: any) {
-  const { setNodes } = useReactFlow();
-
+  const { setNodes, fitView } = useReactFlow();
   const addNode = () => {
     const id = Date.now().toString();
 
@@ -46,6 +45,10 @@ export default function GraphToolbar({ nodes, edges, onSelect, setNode }: any) {
         onClick={() => {
           const newNodes = layoutGraph(nodes, edges);
           setNode(newNodes);
+
+          setTimeout(() => {
+            fitView({ padding: 0.2 });
+          }, 50);
         }}
         className=" bg-blue-500 text-white px-3 py-1 rounded"
       >

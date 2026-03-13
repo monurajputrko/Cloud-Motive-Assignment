@@ -9,6 +9,7 @@ import {
   Connection,
   Edge,
   Node,
+  MarkerType,
   useEdgesState,
   useNodesState,
   useReactFlow,
@@ -90,11 +91,15 @@ export default function GraphCanvas({ initialNodes, initialEdges }: Props) {
   /* ---------------- CONNECT EDGE ---------------- */
 
   const onConnect = (connection: Connection) => {
+    if (!connection.source || !connection.target) return;
+
     const newEdge: Edge = {
       ...connection,
+      source: connection.source,
+      target: connection.target,
       id: `${connection.source}-${connection.target}`,
       label: "relates to",
-      markerEnd: { type: "arrowclosed" },
+      markerEnd: { type: MarkerType.ArrowClosed },
       style: { strokeWidth: 2 },
     };
 
@@ -173,24 +178,41 @@ export default function GraphCanvas({ initialNodes, initialEdges }: Props) {
     };
   });
 
+  const onEdgesDelete = (deleted: Edge[]) => {
+    setEdges((eds) =>
+      eds.filter((edge) => !deleted.some((d) => d.id === edge.id)),
+    );
+  };
+
   return (
     <>
-      <GraphToolbar nodes={nodes} edges={edges} setNode={setNodes} onSelect={handleSearchSelect} />
+      <GraphToolbar
+        nodes={nodes}
+        edges={edges}
+        setNode={setNodes}
+        onSelect={handleSearchSelect}
+      />
       <div className="flex h-[calc(100vh-60px)]">
-
-        {/* AUTO LAYOUT BUTTON */}
-        {/* <button
-          onClick={() => {
-            const newNodes = layoutGraph(nodes, edges);
-            setNodes(newNodes);
-          }}
-          className="absolute top-3 right-3 bg-blue-500 text-white px-3 py-1 rounded"
-        >
-          Auto Layout
-        </button> */}
-
         {/* GRAPH */}
         <div className="flex-1">
+          {/* <ReactFlow
+            nodes={highlightedNodes}
+            edges={highlightedEdges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onNodeClick={onNodeClick}
+            onEdgeDoubleClick={onEdgeDoubleClick}
+            onNodeDragStop={onNodeDragStop}
+            onMove={onMove}
+            onEdgesDelete={onEdgesDelete}
+            onPaneClick={() => setSelectedNodeId(null)}
+            fitView
+          >
+            <MiniMap />
+            <Controls />
+            <Background />
+          </ReactFlow> */}
           <ReactFlow
             nodes={highlightedNodes}
             edges={highlightedEdges}
@@ -201,6 +223,8 @@ export default function GraphCanvas({ initialNodes, initialEdges }: Props) {
             onEdgeDoubleClick={onEdgeDoubleClick}
             onNodeDragStop={onNodeDragStop}
             onMove={onMove}
+            onEdgesDelete={onEdgesDelete}
+            deleteKeyCode={["Backspace", "Delete"]}
             onPaneClick={() => setSelectedNodeId(null)}
             fitView
           >

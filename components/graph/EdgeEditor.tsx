@@ -1,36 +1,33 @@
-"use client"
+"use client";
 
-import { Edge } from "reactflow"
-import { useState } from "react"
+import { Edge } from "reactflow";
+import { useState } from "react";
 
-export default function EdgeEditor({
-  edge,
-  edges,
-  setEdges,
-  onClose,
-}: any) {
-
-  const [label, setLabel] = useState(edge.label)
+export default function EdgeEditor({ edge, edges, setEdges, onClose }: any) {
+  const [label, setLabel] = useState(edge.label);
 
   const updateEdge = () => {
-
     const updated = edges.map((e: Edge) =>
       e.id === edge.id
         ? {
             ...e,
             label,
           }
-        : e
-    )
+        : e,
+    );
 
-    setEdges(updated)
+    setEdges(updated);
 
-    onClose()
-  }
+    onClose();
+  };
+
+  const deleteEdge = () => {
+    setEdges((eds: Edge[]) => eds.filter((e) => e.id !== edge.id));
+    onClose();
+  };
 
   return (
     <div className="w-80 border-l bg-white p-4">
-
       <h2 className="font-bold mb-3">Edit Relationship</h2>
 
       <input
@@ -38,21 +35,24 @@ export default function EdgeEditor({
         value={label}
         onChange={(e) => setLabel(e.target.value)}
       />
-
+ <div className="flex gap-2">
       <button
         onClick={updateEdge}
         className="bg-blue-600 text-white px-3 py-2 rounded"
       >
         Save
       </button>
-
       <button
-        onClick={onClose}
-        className="ml-2 border px-3 py-2 rounded"
+        onClick={deleteEdge}
+       className="bg-red-600 text-white px-3 py-2 rounded"
       >
+        Delete
+      </button>
+      <button onClick={onClose} 
+       className="  border px-3 py-2 rounded">
         Cancel
       </button>
-
+      </div>
     </div>
-  )
+  );
 }
