@@ -301,7 +301,7 @@ Future enhancements could include:
 6. Drag nodes to rearrange the graph
 7. Refresh page to see persistence
 
-Future Improvements
+# Future Improvements
 - Responsive layout for mobile and tablet devices
 - Cloud persistence instead of localStorage
 
